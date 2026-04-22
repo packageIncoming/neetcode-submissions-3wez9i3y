@@ -1,0 +1,29 @@
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+
+        Y = len(board)
+        X = len(board[0])
+        seen  =set()
+        def dfs(letterIdx,x,y):
+            if (x,y) in seen: return False
+            if x >= X or x < 0 or y >=Y or y < 0:
+                return False # OOB
+
+            if board[y][x] != word[letterIdx]:
+                return False
+            if letterIdx == len(word)-1:
+                return True
+            seen.add((x,y))
+            DIRS = [[1,0],[-1,0],[0,1],[0,-1]]
+            for dX,dY in DIRS:
+                if dfs(letterIdx+1,x+dX,y+dY):
+                    return True
+            seen.remove((x,y))
+            return False
+
+        # first find points from which you can start
+        for y in range (len(board)):
+            for x in range(len(board[0])):
+                if dfs(0,x,y):
+                    return True
+        return False
